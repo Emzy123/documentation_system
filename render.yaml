@@ -1,0 +1,40 @@
+databases:
+  - name: document-db
+    databaseName: document_system
+    user: laravel
+    plan: free # Note: Free DBs expire after 90 days
+    region: frankfurt # or your preferred region
+
+services:
+  - type: web
+    name: document-system
+    env: php
+    region: frankfurt
+    plan: free # Note: Free services spin down after 15 mins of inactivity
+    branch: main # Default branch
+    repo: https://github.com/Emzy123/documentation_system.git
+    buildCommand: composer install --no-dev --optimize-autoloader
+    startCommand: heroku-php-nginx public/
+    envVars:
+      - key: APP_NAME
+        value: StudentDocs
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        fromService:
+          name: document-system
+          property: url
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: document-db
+          property: connectionString
+      - key: APP_KEY
+        generateValue: true
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_LIFETIME
+        value: 120

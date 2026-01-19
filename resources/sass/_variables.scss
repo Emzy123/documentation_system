@@ -1,0 +1,31 @@
+// Fonts
+$font-family-sans-serif: 'Inter', sans-serif;
+$font-size-base: 0.95rem;
+$headings-font-weight: 600;
+
+// Colors
+$primary:       #003366; // Academic Blue
+$secondary:     #008080; // Teal
+$success:       #198754;
+$info:          #0dcaf0;
+$warning:       #ffc107;
+$danger:        #dc3545;
+$light:         #f8f9fa;
+$dark:          #212529;
+
+// Body
+$body-bg:       #f4f6f9; // Slightly darker/cooler gray for dashboard bg
+$body-color:    #333333;
+
+// Components
+$card-border-radius:    0.5rem;
+$card-border-width:     0px; // Clean cards without heavy borders (shadows instead)
+$card-cap-bg:           #ffffff;
+
+$btn-border-radius:     0.375rem;
+$input-border-radius:   0.375rem;
+
+// Sidebar Variables (Custom)
+$sidebar-width: 280px;
+$sidebar-bg:    #ffffff;
+$sidebar-color: #333333;

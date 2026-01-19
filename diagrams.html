@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentDocs System Diagrams</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        .diagram-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            background: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>StudentDocs Project Diagrams</h1>
+    <p>Displays project diagrams using Mermaid.js.</p>
+
+    <!-- Load Mermaid -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+
+    <h2>1. System Architecture</h2>
+    <div class="mermaid">
+        graph TD
+        User((User))
+        LB[Load Balancer / Web Server]
+
+        subgraph "Application Layer (Laravel)"
+        Auth[Authentication Service]
+        DocController[Document Controller]
+        VerifyService[Verification Engine]
+        PayService[Payment Service]
+        end
+
+        subgraph "Data Layer"
+        DB[(MySQL Database)]
+        Storage[File Storage (Local/S3)]
+        end
+
+        User -->|HTTPS| LB
+        LB --> Auth
+        Auth --> DocController
+        DocController -->|Upload| Storage
+        DocController --> VerifyService
+        VerifyService -->|Status Update| DB
+        PayService -->|Transaction| DB
+    </div>
+
+    <h2>2. Use Case Diagram</h2>
+    <div class="mermaid">
+        usecaseDiagram
+        actor Student
+        actor Staff
+        actor Admin
+
+        usecase "Upload Documents" as UC1
+        usecase "View Status Dashboard" as UC2
+        usecase "Pay School Fees" as UC3
+        usecase "Download ID Card/Letter" as UC4
+
+        usecase "Verify Documents" as UC5
+        usecase "View Student Profiles" as UC6
+
+        usecase "Manage Users & Roles" as UC7
+        usecase "View System Reports" as UC8
+        usecase "Manage Document Categories" as UC9
+
+        Student --> UC1
+        Student --> UC2
+        Student --> UC3
+        Student --> UC4
+
+        Staff --> UC5
+        Staff --> UC6
+
+        Admin --> UC7
+        Admin --> UC8
+        Admin --> UC9
+        Admin --> UC5
+    </div>
+
+    <h2>3. Data Flow Diagram (DFD)</h2>
+    <div class="mermaid">
+        graph LR
+        Student[Student]
+        Staff[Staff]
+
+        Process1((Authentication))
+        Process2((Document Upload))
+        Process3((Verification Engine))
+        Process4((Manual Review))
+
+        DS1[(User DB)]
+        DS2[(Document DB)]
+        DS3[(Logs DB)]
+
+        Student -->|Credentials| Process1
+        Staff -->|Credentials| Process1
+        Process1 <--> DS1
+
+            Student -->|File & Metadata| Process2
+            Process2 -->|Store File| DS2
+
+            DS2 -->|Fetch Pending| Process3
+            Process3 -->|Auto-Verify/Flag| DS2
+            Process3 -->|Log Result| DS3
+
+            Staff -->|Fetch Flagged/Pending| Process4
+            Process4 -->|Approve/Reject| DS2
+            Process4 -->|Log Action| DS3
+    </div>
+
+    <h2>4. Entity-Relationship (ER) Diagram</h2>
+    <div class="mermaid">
+        erDiagram
+        USERS ||--o{ STUDENTS : has
+        USERS ||--o{ DOCUMENTS : uploads
+        USERS }|--|| ROLES : has_role
+
+        STUDENTS ||--o{ FEES : pays
+
+        DOCUMENTS }|--|| DOCUMENT_CATEGORIES : belongs_to
+        DOCUMENTS ||--o{ VERIFICATION_LOGS : has_logs
+
+        DOCUMENT_CATEGORIES {
+        int id
+        string name
+        boolean is_mandatory
+        }
+
+        DOCUMENTS {
+        int id
+        int user_id
+        string file_path
+        string status
+        }
+
+        USERS {
+        int id
+        string name
+        string email
+        string password
+        }
+
+        FEES {
+        int id
+        decimal amount
+        string status
+        }
+    </div>
+
+</body>
+
+</html>

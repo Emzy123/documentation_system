@@ -18,6 +18,18 @@ Route::get('/migrate', function () {
     return 'Migration completed: ' . nl2br(\Illuminate\Support\Facades\Artisan::output());
 });
 
+Route::get('/seed', function () {
+    $token = env('MIGRATE_TOKEN');
+    
+    if (!$token || request('token') !== $token) {
+        abort(403, 'Unauthorized');
+    }
+
+    \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    
+    return 'Seeding completed: ' . nl2br(\Illuminate\Support\Facades\Artisan::output());
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

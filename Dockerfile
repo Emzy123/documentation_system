@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libpq-dev \
     gnupg \
+    dos2unix \
     && docker-php-ext-install pdo_pgsql pgsql bcmath gd
 
 # Configure Apache DocumentRoot to point to Laravel's public directory
@@ -42,6 +43,7 @@ RUN npm install && npm run build
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN dos2unix /var/www/html/bin/deploy.sh
 RUN chmod +x /var/www/html/bin/deploy.sh
 
 # Expose port 80

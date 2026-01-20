@@ -3,6 +3,7 @@ set -e
 
 echo "Running migrations..."
 php artisan migrate --force
+php artisan db:seed --force
 
 echo "Caching configuration..."
 php artisan config:cache

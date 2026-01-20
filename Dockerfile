@@ -42,6 +42,10 @@ RUN npm install && npm run build
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod +x /var/www/html/bin/deploy.sh
 
 # Expose port 80
 EXPOSE 80
+
+# Start application
+CMD ["/var/www/html/bin/deploy.sh"]

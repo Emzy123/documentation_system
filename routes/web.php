@@ -6,6 +6,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/migrate', function () {
+    $token = env('MIGRATE_TOKEN');
+    
+    if (!$token || request('token') !== $token) {
+        abort(403, 'Unauthorized');
+    }
+
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    
+    return 'Migration completed: ' . nl2br(\Illuminate\Support\Facades\Artisan::output());
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
